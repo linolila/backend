@@ -13,6 +13,7 @@ import { HttpStatus } from '@nestjs/common';
 import { AuthService, LoginResponse } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+import { Public } from './decorators/public.decorator';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -23,6 +24,7 @@ export class AuthController {
     const { password, ...result } = user;
     return result;
   }
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async signIn(@Body() loginDto: LoginDto): Promise<{

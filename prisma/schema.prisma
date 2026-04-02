@@ -39,7 +39,8 @@ model Permission {
 }
 enum RoleType {
   SUPER_ADMIN
-  USER
+  CUSTOMER
+  PROVIDER
 }
 model Role {
   id          String           @id 

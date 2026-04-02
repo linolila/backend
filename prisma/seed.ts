@@ -68,7 +68,7 @@ async function main() {
   /**
    * 3. USER
    */
-  const hashedPassword = await bcrypt.hash('Admin@123', 10);
+  const hashedPassword = await bcrypt.hash('superadmin123', 10);
 
   await prisma.user.upsert({
     where: { email: 'admin@ess.gov.et' },
@@ -77,7 +77,7 @@ async function main() {
     },
     create: {
       id: uuidv7(),
-      email: 'admin@ess.gov.et',
+      email: 'superadmin@gmail.com',
       username: 'superadmin',
       password: hashedPassword,
       isActive: true,

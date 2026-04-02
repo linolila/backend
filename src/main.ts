@@ -5,10 +5,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+// import { JwtAuthGuard } from './auth/guards/auth/auth-guard';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // await app.listen(process.env.PORT ?? 3000);
   // This is the line that makes the decorators work!
+  // const reflector = app.get(Reflector);
+  // app.useGlobalGuards(new JwtAuthGuard(reflector));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // Strips away fields not in the DTO
@@ -36,6 +40,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('', app, document);
   await app.listen(4000);
-  console.log(`Application is running on: ${await app.getUrl()}/api`);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

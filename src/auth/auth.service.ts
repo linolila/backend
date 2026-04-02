@@ -7,6 +7,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { User } from '../../generated/prisma/client/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
@@ -35,6 +36,7 @@ export class AuthService {
     private jwtService: JwtService,
     private usersService: UsersService,
     private prisma: PrismaService,
+    private configservice: ConfigService,
   ) {}
   signUp(createUserDto: CreateUserDto): Promise<User> {
     const hashedPassword = bcrypt.hashSync(createUserDto.password, 10);
@@ -93,11 +95,14 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(
         { sub: userId, email },
-        { secret: 'terces', expiresIn: '1h' },
+        { secret: this.configservice.get('JWT_SECTER'), expiresIn: '1h' },
       ),
       this.jwtService.signAsync(
         { sub: userId, email },
-        { secret: 'secret', expiresIn: '7d' },
+        {
+          secret: this.configservice.get('JWT_REFRESH_SECRET'),
+          expiresIn: '7d',
+        },
       ),
     ]);
 

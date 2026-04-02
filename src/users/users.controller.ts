@@ -18,6 +18,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserFilterDto } from './dto/user-filter.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '../../generated/prisma/client/client';
+import { Public } from '../auth/decorators/public.decorator';
 // import { JwtAuthGuard } from '../auth/guards/auth-guard';
 // import { ApiBearerAuth } from '@nestjs/swagger';
 // @ApiBearerAuth('JWT-auth')
@@ -45,7 +46,7 @@ export class UsersController {
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
-
+  @Public()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
