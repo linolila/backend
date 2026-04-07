@@ -66,10 +66,7 @@ export class AuthService {
     if (!passwordValid) {
       throw new UnauthorizedException('Invalid password');
     }
-    const tokens = await this.getTokens(
-      user.id,
-      user.email,
-    );
+    const tokens = await this.getTokens(user.id, user.email);
     // 5. Return mapped data
     return {
       success: true,

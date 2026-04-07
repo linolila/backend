@@ -12,21 +12,21 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   @IsNotEmpty()
-  username: string;
+  username!: string;
   @ApiProperty({ example: 'johndoe@gmail.com' })
   @IsEmail()
   @IsOptional()
-  email: string;
+  email!: string;
   @ApiProperty({ example: 'dwew234wd!fvr' })
   @IsString()
   @IsOptional()
-  refreshToken: string;
+  refreshToken!: string;
   @ApiProperty({ example: 'password123' })
   @IsString()
   @IsOptional()
   @MinLength(8)
-  password: string;
+  password!: string;
   @IsString()
   @IsOptional()
-  roleId: string;
+  roleId!: string;
 }

@@ -1,19 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'g../../../generated/prisma/client/client';
+import { User } from '../../../generated/prisma/client/client';
 
 export class Users implements Partial<User> {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  email: string;
+  email!: string;
 
   @ApiProperty({ required: false, nullable: true })
-  username: string;
+  username!: string;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updatedAt!: Date;
 }
