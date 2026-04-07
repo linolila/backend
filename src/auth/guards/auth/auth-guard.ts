@@ -17,7 +17,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // 🔥 SKIP AUTH
     if (isPublic) return true;
 
-    const can = super.canActivate(context) as boolean;
-    return can;
+    return super.canActivate(context);
   }
 }

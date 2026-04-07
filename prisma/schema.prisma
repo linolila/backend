@@ -42,7 +42,8 @@ model Permission {
 
 enum RoleType {
   SUPER_ADMIN
-  USER
+  CUSTOMER
+  PROVIDER
 }
 
 enum StatusType {

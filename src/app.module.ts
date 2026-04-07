@@ -8,10 +8,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { RoleModule } from './role/role.module';
 import { PermissionsModule } from './permissions/permissions.module';
-// import { APP_GUARD } from '@nestjs/core';
-// import { JwtAuthGuard } from './auth/guards/auth/auth-guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/auth/auth-guard';
 import { PassportModule } from '@nestjs/passport';
-// import { JwtModule } from '@nestjs/jwt';
 import { OrdersModule } from './orders/orders.module';
 @Module({
   imports: [
@@ -32,6 +31,12 @@ import { OrdersModule } from './orders/orders.module';
     OrdersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

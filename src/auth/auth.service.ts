@@ -69,8 +69,6 @@ export class AuthService {
     const tokens = await this.getTokens(
       user.id,
       user.email,
-      user.role.permissions.map((rp) => rp.permission.code),
-      user.role.type,
     );
     // 5. Return mapped data
     return {
@@ -98,17 +96,18 @@ export class AuthService {
   async getTokens(
     userId: string,
     email: string,
-    permissions: string[] = [],
-    roleType?: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: userId, email, permissions, roleType },
-        { secret: this.configservice.get('JWT_SECRET'), expiresIn: '1h' },
+        { sub: userId, email },
+        { secret: this.configservice.get('JWT_SECTER'), expiresIn: '1h' },
       ),
       this.jwtService.signAsync(
         { sub: userId, email },
-        { secret: 'secret', expiresIn: '7d' },
+        {
+          secret: this.configservice.get('JWT_REFRESH_SECRET'),
+          expiresIn: '7d',
+        },
       ),
     ]);
 
