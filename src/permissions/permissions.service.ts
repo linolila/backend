@@ -2,19 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { uuidv7 } from 'uuidv7';
+// import { Permission } from '../../generated/prisma/client/client';
+
 @Injectable()
 export class PermissionsService {
   constructor(private prisma: PrismaService) {}
-  create(createPermissionDto: CreatePermissionDto) {
+  async create(
+    createPermissionDto: CreatePermissionDto,
+  ): Promise<{ permission: any; message: string }> {
     const { name, resource, action, description } = createPermissionDto;
     // We can auto-generate the 'code' in the service!
-    const code = `${resource.toUpperCase()}_${action.toUpperCase()}`;
+    const code = `${resource}_${action}`;
+    const perm = await this.prisma.permission.create({
+      data: {
+        id: uuidv7(),
+        name,
+        resource,
+        action,
+        description,
+        code,
+      },
+    });
     return {
-      name,
-      resource,
-      action,
-      description,
-      code,
+      permission: perm,
+      message: 'Permission created successfully',
     };
   }
 

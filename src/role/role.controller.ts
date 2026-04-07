@@ -15,8 +15,10 @@ import {
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { FilterRoleDto } from './dto/filter-role-dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('role')
+@ApiBearerAuth('JWT-auth')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 

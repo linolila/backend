@@ -1,24 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RoleType } from '../../../generated/prisma/client/enums';
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 export class CreateRoleDto {
-  @ApiProperty({
-    example: '019d2f2f-8b1b-7eb8-a37f-55838a724531',
-    description: 'Role Id',
-  })
-  id: string;
   @ApiProperty({ example: 'Admin', description: 'Role Name' })
-  name: string;
+  @IsString()
+  name!: string;
   @ApiProperty({ example: 'ADMIN', description: 'Role Code' })
-  code: string;
+  @IsString()
+  code!: string;
   @ApiProperty({ example: 'ADMIN', description: 'Role Type' })
-  type: RoleType;
+  @IsString()
+  type!: RoleType;
   @ApiProperty({
     example: 'This is the admin role',
     description: 'Role Description',
   })
+  @IsString()
+  @IsOptional()
   description?: string;
   @IsArray()
   @IsString({ each: true })
-  permissions: string[];
+  permissions!: string[];
 }

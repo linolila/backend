@@ -8,21 +8,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id        String   @id  
-  email     String   @unique
-  username  String   @unique
-  password  String
-  isActive  Boolean  @default(true)
+  id           String  @id
+  email        String  @unique
+  username     String  @unique
+  password     String
+  isActive     Boolean @default(true)
   refreshToken String?
+  cakes        Cake[]  @relation("Provider of cake")
+  orders       Order[] @relation("CustomerOrders")
+
   // Relations
-  roleId    String
-  role      Role     @relation(fields: [roleId], references: [id])
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
 }
 
 model Permission {
-  id          String           @id 
+  id          String           @id
   name        String           @unique
   code        String           @unique
   description String?
@@ -37,25 +39,38 @@ model Permission {
   @@index([resource, action])
   @@map("permissions")
 }
+
 enum RoleType {
   SUPER_ADMIN
   USER
 }
+
+enum StatusType {
+  PENDING
+  ACCEPTED
+  PREPARING
+  OUT_FOR_DELIVERY
+  COMPLETED
+  CANCELLED
+}
+
 model Role {
-  id          String           @id 
+  id          String           @id
   name        String           @unique
   code        String           @unique
-  type        RoleType        
+  type        RoleType
   description String?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   permissions RolePermission[]
   users       User[]
+
   @@index([name])
   @@index([code])
   @@index([type])
   @@map("roles")
 }
+
 model RolePermission {
   roleId       String
   permissionId String
@@ -64,4 +79,43 @@ model RolePermission {
   permission Permission @relation(fields: [permissionId], references: [id])
 
   @@id([roleId, permissionId])
+}
+
+model Cake {
+  id          String   @id
+  name        String   @unique
+  description String
+  price       Float
+  imageUrl    String
+  category    String
+  rating      Float    @default(0)
+  ingredients String[]
+  providerId  String
+  provider    User     @relation("Provider of cake", fields: [providerId], references: [id])
+  orders      Order[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id String @id
+
+  // The Customer
+  customerId String
+  customer   User   @relation("CustomerOrders", fields: [customerId], references: [id])
+
+  // The Cake (Optional: Nullable if it's a completely custom order)
+  cakeId String?
+  cake   Cake?   @relation(fields: [cakeId], references: [id])
+
+  // Customization & Description
+  quantity      Int        @default(1)
+  customDetails String? // "User Input" goes here (e.g., "Less sugar")
+  status        StatusType @default(PENDING)
+
+  // Pricing (Snapshot: Prices change, so save the price at the time of order!)
+  totalPrice Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

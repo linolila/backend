@@ -18,11 +18,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserFilterDto } from './dto/user-filter.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '../../generated/prisma/client/client';
+// import { Public } from '../auth/decorators/public.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 // import { JwtAuthGuard } from '../auth/guards/auth-guard';
 // import { ApiBearerAuth } from '@nestjs/swagger';
 // @ApiBearerAuth('JWT-auth')
 // @UseGuards(JwtAuthGuard)
 @Controller('users')
+@ApiBearerAuth('JWT-auth')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

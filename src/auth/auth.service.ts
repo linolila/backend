@@ -7,6 +7,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { User } from '../../generated/prisma/client/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
@@ -35,6 +36,7 @@ export class AuthService {
     private jwtService: JwtService,
     private usersService: UsersService,
     private prisma: PrismaService,
+    private configservice: ConfigService,
   ) {}
   signUp(createUserDto: CreateUserDto): Promise<User> {
     const hashedPassword = bcrypt.hashSync(createUserDto.password, 10);
@@ -43,9 +45,10 @@ export class AuthService {
       email: createUserDto.email,
       password: hashedPassword,
       roleId: createUserDto.roleId,
-      refreshToken: createUserDto.password,
+      refreshToken: createUserDto.refreshToken,
     });
   }
+
   async login(
     email: string,
     password: string,
@@ -63,12 +66,18 @@ export class AuthService {
     if (!passwordValid) {
       throw new UnauthorizedException('Invalid password');
     }
-    const tokens = await this.getTokens(user.id, user.email);
+    const tokens = await this.getTokens(
+      user.id,
+      user.email,
+      user.role.permissions.map((rp) => rp.permission.code),
+      user.role.type,
+    );
     // 5. Return mapped data
     return {
       success: true,
       data: {
-        ...tokens,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
         user: {
           id: user.id,
           email: user.email,
@@ -89,11 +98,13 @@ export class AuthService {
   async getTokens(
     userId: string,
     email: string,
+    permissions: string[] = [],
+    roleType?: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: userId, email },
-        { secret: 'terces', expiresIn: '1h' },
+        { sub: userId, email, permissions, roleType },
+        { secret: this.configservice.get('JWT_SECRET'), expiresIn: '1h' },
       ),
       this.jwtService.signAsync(
         { sub: userId, email },

@@ -10,8 +10,10 @@ import {
 import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('permissions')
+@ApiBearerAuth('JWT-auth')
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 

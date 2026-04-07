@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "moduleResolution": "node",
-    // "resolvePackageJsonExports": true,
+    // "moduleResolution": "node",
+   "resolvePackageJsonExports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -15,11 +15,13 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "types": ["node", "jest"],
   }
 }

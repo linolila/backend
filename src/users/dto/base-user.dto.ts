@@ -1,21 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class BaseUser {
   @ApiProperty({ example: 'john_doe' })
   @IsString()
   @IsNotEmpty()
-  username: string;
+  username!: string;
   @ApiProperty({ example: 'johndoe@gmail.com' })
   @IsEmail()
-  email: string;
+  email!: string;
   @ApiProperty({ example: 'dwew234wd!fvr' })
   @IsString()
-  refreshToken: string;
+  @IsOptional()
+  refreshToken!: string;
   @ApiProperty({ example: 'password123' })
   @IsString()
   @MinLength(8)
-  password: string;
+  password!: string;
   @IsString()
-  roleId: string;
+  @IsOptional()
+  roleId!: string;
 }

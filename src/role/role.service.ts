@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Role } from '../../generated/prisma/client/client';
 import { uuidv7 } from 'uuidv7';
 import { FilterRoleDto } from './dto/filter-role-dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 @Injectable()
 export class RoleService {
   constructor(private prisma: PrismaService) {}
@@ -33,7 +34,6 @@ export class RoleService {
       message: 'Role created successfully',
     };
   }
-
   findAll(filterRoleDto: FilterRoleDto): Promise<Role[]> {
     return this.prisma.role.findMany({
       where: {
@@ -52,7 +52,7 @@ export class RoleService {
       where: { id },
     });
   }
-  updateRole(id: string, updateRoleDto: CreateRoleDto): Promise<Role> {
+  updateRole(id: string, updateRoleDto: UpdateRoleDto): Promise<Role> {
     return this.prisma.role.update({
       where: { id },
       data: {
