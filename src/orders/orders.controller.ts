@@ -13,8 +13,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
 import { JwtAuthGuard } from '../auth/guards/auth/auth-guard';
-import { PermissionsGuard } from '../auth/guards/permissions./permissions..guard';
-
+import { PermissionsGuard } from '../auth/guards/permissions/permissions.guard';
 @Controller('orders')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class OrdersController {

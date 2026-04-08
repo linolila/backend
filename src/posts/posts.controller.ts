@@ -14,7 +14,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { RequirePermissions } from '../auth/decorators/permission-decorator';
 import { JwtAuthGuard } from '../auth/guards/auth/auth-guard';
-import { PermissionsGuard } from '../auth/guards/permissions./permissions..guard';
+import { PermissionsGuard } from '../auth/guards/permissions/permissions.guard';
 
 @Controller('cakes')
 @ApiBearerAuth('JWT-auth')
